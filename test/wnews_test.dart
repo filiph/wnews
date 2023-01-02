@@ -9,6 +9,12 @@ void main() {
   test('extracts the correct number of news items', () {
     expect(extractNews(_html).length, 4);
   });
+
+  test('the first item is correct', () {
+    final firstItem = extractNews(_html).first;
+    expect(firstItem.text, contains('Croatia'));
+    expect(firstItem.link, isNotNull);
+  });
 }
 
 const _html = r'''

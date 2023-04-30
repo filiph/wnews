@@ -27,7 +27,7 @@ List<NewsItem> extractNews(String html) {
 
   NewsItem extract(XPathNode node) {
     final text = node.text!.replaceAll(' (pictured)', '');
-    final linkElement = node.queryXPath('/b/a').node;
+    final linkElement = node.queryXPath('//b//a').node;
     Uri? link;
     if (linkElement != null) {
       link = Uri.tryParse(linkElement.attributes['href'] ?? '');

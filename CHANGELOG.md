@@ -1,3 +1,7 @@
+## 0.1.2
+
+- Add documentation
+
 ## 0.1.1
 
 - Fix issue with italicized links not being extracted

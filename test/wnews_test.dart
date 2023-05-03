@@ -18,7 +18,7 @@ void main() {
 
   test('italics do not break the extraction', () {
     final news = extractNews(_htmlWithItalics);
-    final lastItem  = news.last;
+    final lastItem = news.last;
     expect(lastItem.link, isNotNull);
     expect(lastItem.link!.pathSegments, contains('Montevideo_Maru'));
   });

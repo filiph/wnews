@@ -57,7 +57,8 @@ void main(List<String> arguments) async {
   client.close(force: true);
 }
 
-String _writeItem(NewsItem item, int width, bool showLinks, {int indent = 2, String bullet = '→'}) {
+String _writeItem(NewsItem item, int width, bool showLinks,
+    {int indent = 2, String bullet = '→'}) {
   final buf = StringBuffer();
 
   var column = 0;

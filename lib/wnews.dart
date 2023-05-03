@@ -1,6 +1,13 @@
 import 'package:xpath_selector/xpath_selector.dart';
 import 'package:xpath_selector_html_parser/xpath_selector_html_parser.dart';
 
+/// Takes the HTML contents of something like
+/// https://en.wikipedia.org/wiki/Main_Page
+/// and extracts the items in the _In the news_ section.
+///
+/// For the sake of simplicity, this currently only works for the English
+/// Wikipedia, and assumes quite a lot about the structure
+/// of the page.
 List<NewsItem> extractNews(String html) {
   final parser = HtmlXPath.html(html);
 
@@ -38,10 +45,24 @@ List<NewsItem> extractNews(String html) {
   return listItems.map((li) => extract(li)).toList(growable: false);
 }
 
+/// This represents a single item of news as seen on Wikipedia's
+/// main page.
 class NewsItem {
+  /// The text of the news item.
+  ///
+  /// Example:
+  ///
+  /// > The wreckage of the Montevideo Maru is discovered
+  /// > in the South China Sea.
   final String text;
 
+  /// The link associated with the news item.
+  ///
+  /// Example:
+  ///
+  ///     https://en.wikipedia.org/wiki/Montevideo_Maru
   final Uri? link;
 
+  // Constructs a news item with [text] and (optional) [link].
   const NewsItem(this.text, this.link);
 }

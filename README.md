@@ -48,12 +48,3 @@ on your `$PATH` by simply typing `wnews` (as if you activated the version
 that is on pub.dev).
 
 ### TODO
-
-Use the Wikimedia API to access the news instead of a brittle XPath.
-https://api.wikimedia.org/wiki/API_reference/Feed/Featured_content
-
-- JSON
-  - news > {story, links (type,titles,thumbnail,lead-image,timestamp,..)}
-- Available in [15 languages](https://api.wikimedia.org/wiki/API_reference/Feed#In_the_news)
-  - English, Spanish, German, French, Korean, Polish, Portuguese
-- 

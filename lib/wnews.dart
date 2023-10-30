@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:xpath_selector/xpath_selector.dart';
-import 'package:xpath_selector_html_parser/xpath_selector_html_parser.dart';
+import 'package:html/parser.dart' as html;
 
 /// Takes the HTML contents of something like
 /// https://en.wikipedia.org/wiki/Main_Page
@@ -8,41 +10,45 @@ import 'package:xpath_selector_html_parser/xpath_selector_html_parser.dart';
 /// For the sake of simplicity, this currently only works for the English
 /// Wikipedia, and assumes quite a lot about the structure
 /// of the page.
-List<NewsItem> extractNews(String html) {
-  final parser = HtmlXPath.html(html);
+List<NewsItem> extractNews(String json) {
+  final parsedJson = jsonDecode(json) as Map<String, dynamic>;
+  final news = parsedJson['news'] as List<dynamic>?;
 
-  final newsHeadline =
-      parser.query("//h2[contains(text(),'In the news')]").node;
-  if (newsHeadline == null) {
-    throw ArgumentError('Cannot find the headline "In the news"');
-  }
-
-  final boxDiv = newsHeadline.queryXPath('/ancestor::div').node;
-  if (boxDiv == null) {
-    throw StateError('Cannot find the ancestor <div> of "In the news"');
-  }
-
-  final firstList = boxDiv.queryXPath("/descendant::ul[1]").node;
-  if (firstList == null) {
-    throw StateError('Cannot find the first list of news');
-  }
-
-  final listItems = firstList.queryXPath('/li').nodes;
-  if (listItems.isEmpty) {
+  if (news == null || news.isEmpty) {
     throw StateError('The list is empty');
   }
 
-  NewsItem extract(XPathNode node) {
-    final text = node.text!.replaceAll(' (pictured)', '');
-    final linkElement = node.queryXPath('//b//a').node;
-    Uri? link;
-    if (linkElement != null) {
-      link = Uri.tryParse(linkElement.attributes['href'] ?? '');
-    }
-    return NewsItem(text, link);
-  }
+  final newsList = news.map((n) {
+    final currentNew = n['story'];
 
-  return listItems.map((li) => extract(li)).toList(growable: false);
+    // Parse the HTML content within the "story" field
+    final document = html.parse(currentNew);
+
+    // Extract the text content from the parsed HTML
+    final newsContent = document.body!.text;
+
+    // Extract url from json
+    final links = n['links'] as List<dynamic>?;
+    Uri? uri;
+    if (links != null && links.isNotEmpty) {
+      final url = links.first['content_urls']['desktop']['page'] as String?;
+      if (url != null) uri = Uri.tryParse(url);
+    }
+
+    return NewsItem(newsContent, uri);
+  }).toList(growable: false);
+
+  return newsList;
+}
+
+NewsItem extract(XPathNode node) {
+  final text = node.text!.replaceAll(' (pictured)', '');
+  final linkElement = node.queryXPath('//b//a').node;
+  Uri? link;
+  if (linkElement != null) {
+    link = Uri.tryParse(linkElement.attributes['href'] ?? '');
+  }
+  return NewsItem(text, link);
 }
 
 /// This represents a single item of news as seen on Wikipedia's

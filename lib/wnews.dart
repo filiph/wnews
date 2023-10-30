@@ -3,13 +3,12 @@ import 'dart:convert';
 import 'package:xpath_selector/xpath_selector.dart';
 import 'package:html/parser.dart' as html;
 
-/// Takes the HTML contents of something like
-/// https://en.wikipedia.org/wiki/Main_Page
-/// and extracts the items in the _In the news_ section.
+/// Parses the JSON response from
+/// https://api.wikimedia.org/feed/v1/wikipedia/en/featured/2023/10/30
+/// where date is current day and language is parameter
+/// and extracts news items.
 ///
-/// For the sake of simplicity, this currently only works for the English
-/// Wikipedia, and assumes quite a lot about the structure
-/// of the page.
+/// For each item uses story and links parameters
 List<NewsItem> extractNews(String json) {
   final parsedJson = jsonDecode(json) as Map<String, dynamic>;
   final news = parsedJson['news'] as List<dynamic>?;

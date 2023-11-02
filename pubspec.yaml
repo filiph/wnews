@@ -10,7 +10,6 @@ dependencies:
   args: ^2.3.1
   html: ^0.15.4
   intl: ^0.18.1
-  xpath_selector: ^3.0.0
 
 dev_dependencies:
   lints: ^2.0.0

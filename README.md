@@ -46,5 +46,3 @@ dart pub global activate --source path .
 After this, the executable in `bin/wnews.dart` is accessible
 on your `$PATH` by simply typing `wnews` (as if you activated the version
 that is on pub.dev).
-
-### TODO

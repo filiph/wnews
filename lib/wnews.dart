@@ -10,6 +10,10 @@ import 'package:html/parser.dart' as html;
 ///
 /// Structure of url defined at https://api.wikimedia.org/wiki/Feed_API/Reference/Featured_content
 List<NewsItem> extractNews(String json) {
+  if (json.trim().isEmpty) {
+    throw ArgumentError('Cannot extract news from empty string');
+  }
+
   final parsedJson = jsonDecode(json) as Map<String, dynamic>;
   final news = parsedJson['news'] as List<dynamic>?;
 

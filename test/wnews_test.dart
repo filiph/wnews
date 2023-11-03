@@ -15,6 +15,14 @@ void main() {
     expect(firstItem.text, contains('Texas Rangers'));
     expect(firstItem.link, isNotNull);
   });
+
+  test('constructs endpoint URI', () {
+    final uri = getEndpointUri();
+    expect(uri.scheme, 'https');
+    expect(uri.host, 'api.wikimedia.org');
+    expect(uri.pathSegments, contains('en'));
+    expect(uri.pathSegments, contains('featured'));
+  });
 }
 
 const _json = r'''

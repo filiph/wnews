@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:intl/intl.dart';
 import 'package:wnews/wnews.dart';
 
 void main(List<String> arguments) async {
@@ -68,13 +67,9 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
-  final now = DateTime.now();
-  final today = DateFormat('yyyy/MM/dd').format(now);
-
   final client = HttpClient();
-  final request = await client.getUrl(Uri.parse(
-    'https://api.wikimedia.org/feed/v1/wikipedia/$language/featured/$today',
-  ));
+  final uri = getEndpointUri(language: language);
+  final request = await client.getUrl(uri);
   final response = await request.close();
   final json = await utf8.decodeStream(response);
 

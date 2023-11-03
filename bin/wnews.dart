@@ -72,10 +72,9 @@ void main(List<String> arguments) async {
   final today = DateFormat('yyyy/MM/dd').format(now);
 
   final client = HttpClient();
-  final request = await client.getUrl(
-    Uri.parse(
-        'https://api.wikimedia.org/feed/v1/wikipedia/$language/featured/$today'),
-  );
+  final request = await client.getUrl(Uri.parse(
+    'https://api.wikimedia.org/feed/v1/wikipedia/$language/featured/$today',
+  ));
   final response = await request.close();
   final json = await utf8.decodeStream(response);
 

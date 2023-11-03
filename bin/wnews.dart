@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:intl/intl.dart';
 import 'package:wnews/wnews.dart';
 
 void main(List<String> arguments) async {
@@ -28,10 +29,36 @@ void main(List<String> arguments) async {
     defaultsTo: '80',
   );
 
+  parser.addOption(
+    'language',
+    help: 'Language of the output',
+    allowed: [
+      'bs',
+      'da',
+      'de',
+      'el',
+      'en',
+      'es',
+      'fi',
+      'fr',
+      'he',
+      'ko',
+      'no',
+      'pl',
+      'pt',
+      'ru',
+      'sco',
+      'sv',
+      'vi',
+    ],
+    defaultsTo: 'en',
+  );
+
   var results = parser.parse(arguments);
 
   final showLinks = results['links']! as bool;
   final width = int.tryParse(results['width']!) ?? 80;
+  final language = results['language']! as String;
 
   if (results['help']) {
     print('Print the most important news of the past few days\n'
@@ -41,13 +68,18 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
-  final client = HttpClient();
-  final request = await client
-      .getUrl(Uri.parse('https://en.m.wikipedia.org/wiki/Main_Page'));
-  final response = await request.close();
-  final html = await utf8.decodeStream(response);
+  final now = DateTime.now();
+  final today = DateFormat('yyyy/MM/dd').format(now);
 
-  final news = extractNews(html);
+  final client = HttpClient();
+  final request = await client.getUrl(
+    Uri.parse(
+        'https://api.wikimedia.org/feed/v1/wikipedia/$language/featured/$today'),
+  );
+  final response = await request.close();
+  final json = await utf8.decodeStream(response);
+
+  final news = extractNews(json);
 
   for (final item in news) {
     final string = _writeItem(item, width, showLinks);

@@ -1,3 +1,7 @@
+## 0.2.2
+
+- Fix bug that tried to access news for future days (forgotten UTC conversion)
+
 ## 0.2.1
 
 - Provide method to construct endpoint: `getEndpointUri()`

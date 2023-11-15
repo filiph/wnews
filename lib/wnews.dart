@@ -52,7 +52,7 @@ List<NewsItem> extractNews(String json) {
 /// such as
 /// `https://api.wikimedia.org/feed/v1/wikipedia/en/featured/2023/10/30`.
 Uri getEndpointUri({String language = 'en'}) {
-  final now = DateTime.now();
+  final now = DateTime.now().toUtc();
   final today = DateFormat('yyyy/MM/dd').format(now);
 
   return Uri.parse(

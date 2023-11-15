@@ -1,6 +1,6 @@
 name: wnews
 description: A tiny command-line newsreader backed by Wikipedia.
-version: 0.2.1
+version: 0.2.2
 repository: https://github.com/filiph/wnews
 
 environment:
